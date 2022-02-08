@@ -16,7 +16,7 @@ var env         = process.env.npm_config_qa ? 'qa' : process.env.npm_config_uat 
   var DD = d.getDate() >= 10 ? d.getDate() : '0' + d.getDate();
   var h  = d.getHours() >= 10 ? d.getHours() : '0' + d.getHours();
   var mm = d.getMinutes() >= 10 ? d.getMinutes() : '0' + d.getMinutes();
-  version = yy + MM + DD + h + mm;
+  version = "" + yy + MM + DD + h + mm;
   versionPath = distPath + '/' + version;
 })();
 
