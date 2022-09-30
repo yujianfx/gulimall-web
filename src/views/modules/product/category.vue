@@ -1,21 +1,22 @@
 <template>
   <div>
     <el-tree
+      ref="tree"
+      :check-strictly="true"
       :data="dataList"
       :expand-on-click-node="false"
+      :props="defaultProps"
       :show-checkbox="true"
       node-key="catId"
-      ref="tree"
-      :props="defaultProps"
-      :check-strictly="true"
-      @node-click="handleNodeClick" @check="handleCheck">
-    <span class="mall-category-tree-node" slot-scope="{node,data}">
+      @check="handleCheck" @node-click="handleNodeClick">
+    <span slot-scope="{node,data}" class="mall-category-tree-node">
       <span>{{ node.label }}</span>
       <span>
-        <el-button v-if="node.level<=2" type="text" size="mini" @click="()=>append(node,data)">添加节点</el-button>
-        <el-button v-if="node.level<=2" type="text" size="mini" @click="()=>edit(node,data)">修改</el-button>
-        <el-button v-if="node.childNodes.length===0" type="text" size="mini"
-                   @click="()=>removeMultiple()">删除</el-button>
+        <el-button v-if="node.level<=2" size="mini" type="text" @click="()=>append(node,data)">添加节点</el-button>
+        <el-button v-if="node.level<=2" size="mini" type="text" @click="()=>edit(node,data)">修改</el-button>
+
+        <el-button v-if="node.childNodes.length===0" size="mini" type="text"
+                   @click="()=>remove(node,data)">删除</el-button>
       </span>
     </span>
     </el-tree>
@@ -34,13 +35,13 @@
             </div>
           </el-form-item>
           <el-form-item label="名字">
-            <el-input v-model="newCategory.name" maxlength="12" label-width="40px"></el-input>
+            <el-input v-model="newCategory.name" label-width="40px" maxlength="12"></el-input>
           </el-form-item>
           <el-form-item label="状态">
             <div>
-              <el-switch v-model="newCategory.showStatus===0"
-                         active-value="0"
-                         inactive-value="1"
+              <el-switch v-model="newCategory.showStatus"
+                         :active-value="0"
+                         :inactive-value="1"
               ></el-switch>
             </div>
           </el-form-item>
@@ -108,7 +109,6 @@ export default {
     edit (node, data) {
     },
     submitAppend () {
-      console.log(this.newCategory)
       this.$http({
         url: this.$http.adornUrl('/product/category/save'),
         method: 'post',
@@ -121,6 +121,20 @@ export default {
         }
       }).final(() => {
         this.dialogInfo.visible = false
+      })
+    },
+    remove (node, data) {
+      console.log(node, data)
+      const ids = [data.catId]
+      this.$http({
+        url: this.$http.adornUrl('/product/category/delete'),
+        method: 'delete',
+        data: this.$http.adornData(ids, false, 'json')
+      }).then((res) => {
+        if (res.status === 200 && res.data.code === 0) {
+          this.$refs.tree.remove(node)
+          alert('删除成功')
+        }
       })
     },
     removeMultiple () {

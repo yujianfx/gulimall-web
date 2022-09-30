@@ -65,7 +65,7 @@
       this.getCaptcha()
     },
     methods: {
-      // 提交表单
+
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
@@ -90,7 +90,7 @@
           }
         })
       },
-      // 获取验证码
+
       getCaptcha () {
         this.dataForm.uuid = getUUID()
         this.captchaPath = this.$http.adornUrl(`/captcha.jpg?uuid=${this.dataForm.uuid}`)

@@ -101,7 +101,7 @@
       this.getDataList()
     },
     methods: {
-      // 获取数据列表
+
       getDataList () {
         this.dataListLoading = true
         this.$http({
@@ -113,14 +113,14 @@
           this.dataListLoading = false
         })
       },
-      // 新增 / 修改
+
       addOrUpdateHandle (id) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
         })
       },
-      // 删除
+
       deleteHandle (id) {
         this.$confirm(`确定对[id=${id}]进行[删除]操作?`, '提示', {
           confirmButtonText: '确定',

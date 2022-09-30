@@ -21,7 +21,7 @@
   export default {
     provide () {
       return {
-        // 刷新
+
         refresh () {
           this.$store.commit('common/updateContentIsNeedRefresh', true)
           this.$nextTick(() => {
@@ -64,14 +64,14 @@
       this.resetDocumentClientHeight()
     },
     methods: {
-      // 重置窗口可视高度
+
       resetDocumentClientHeight () {
         this.documentClientHeight = document.documentElement['clientHeight']
         window.onresize = () => {
           this.documentClientHeight = document.documentElement['clientHeight']
         }
       },
-      // 获取当前管理员信息
+
       getUserInfo () {
         this.$http({
           url: this.$http.adornUrl('/sys/user/info'),

@@ -97,7 +97,7 @@
       this.getDataList()
     },
     methods: {
-      // 获取数据列表
+
       getDataList () {
         this.dataListLoading = true
         this.$http({
@@ -119,29 +119,29 @@
           this.dataListLoading = false
         })
       },
-      // 每页数
+
       sizeChangeHandle (val) {
         this.pageSize = val
         this.pageIndex = 1
         this.getDataList()
       },
-      // 当前页
+
       currentChangeHandle (val) {
         this.pageIndex = val
         this.getDataList()
       },
-      // 多选
+
       selectionChangeHandle (val) {
         this.dataListSelections = val
       },
-      // 新增 / 修改
+
       addOrUpdateHandle (id) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
         })
       },
-      // 删除
+
       deleteHandle (id) {
         var ids = id ? [id] : this.dataListSelections.map(item => {
           return item.id

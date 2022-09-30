@@ -6,8 +6,8 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('generator:pmsbrand:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('generator:pmsbrand:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('ware:wareordertask:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('ware:wareordertask:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -23,46 +23,92 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="brandId"
+        prop="id"
         header-align="center"
         align="center"
-        label="品牌id">
+        label="id">
       </el-table-column>
       <el-table-column
-        prop="name"
+        prop="orderId"
         header-align="center"
         align="center"
-        label="品牌名">
+        label="order_id">
       </el-table-column>
       <el-table-column
-        prop="logo"
+        prop="orderSn"
         header-align="center"
         align="center"
-        label="品牌logo地址">
+        label="order_sn">
       </el-table-column>
       <el-table-column
-        prop="descript"
+        prop="consignee"
         header-align="center"
         align="center"
-        label="介绍">
+        label="收货人">
       </el-table-column>
       <el-table-column
-        prop="showStatus"
+        prop="consigneeTel"
         header-align="center"
         align="center"
-        label="显示状态[0-不显示；1-显示]">
+        label="收货人电话">
       </el-table-column>
       <el-table-column
-        prop="firstLetter"
+        prop="deliveryAddress"
         header-align="center"
         align="center"
-        label="检索首字母">
+        label="配送地址">
       </el-table-column>
       <el-table-column
-        prop="sort"
+        prop="orderComment"
         header-align="center"
         align="center"
-        label="排序">
+        label="订单备注">
+      </el-table-column>
+      <el-table-column
+        prop="paymentWay"
+        header-align="center"
+        align="center"
+        label="付款方式">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.payment==1">在线付款</el-tag>
+          <el-tag v-if="scope.row.payment==2">货到付款</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="taskStatus"
+        header-align="center"
+        align="center"
+        label="任务状态">
+      </el-table-column>
+      <el-table-column
+        prop="orderBody"
+        header-align="center"
+        align="center"
+        label="订单描述">
+      </el-table-column>
+      <el-table-column
+        prop="trackingNo"
+        header-align="center"
+        align="center"
+        label="物流单号">
+      </el-table-column>
+      <el-table-column
+        prop="createTime"
+        header-align="center"
+        align="center"
+        label="create_time">
+      </el-table-column>
+      <el-table-column
+        prop="wareId"
+        header-align="center"
+        align="center"
+        label="仓库id">
+      </el-table-column>
+      <el-table-column
+        prop="taskComment"
+        header-align="center"
+        align="center"
+        label="工作单备注">
       </el-table-column>
       <el-table-column
         fixed="right"
@@ -71,8 +117,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.brandId)">修改</el-button>
-          <el-button type="text" size="small" @click="deleteHandle(scope.row.brandId)">删除</el-button>
+          <el-button type="text" size="small" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+          <el-button type="text" size="small" @click="deleteHandle(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -91,7 +137,7 @@
 </template>
 
 <script>
-  import AddOrUpdate from './pmsbrand-add-or-update'
+  import AddOrUpdate from './wareordertask-add-or-update'
   export default {
     data () {
       return {
@@ -114,11 +160,11 @@
       this.getDataList()
     },
     methods: {
-      // 获取数据列表
+
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/generator/pmsbrand/list'),
+          url: this.$http.adornUrl('/ware/wareordertask/list'),
           method: 'get',
           params: this.$http.adornParams({
             'page': this.pageIndex,
@@ -136,32 +182,32 @@
           this.dataListLoading = false
         })
       },
-      // 每页数
+
       sizeChangeHandle (val) {
         this.pageSize = val
         this.pageIndex = 1
         this.getDataList()
       },
-      // 当前页
+
       currentChangeHandle (val) {
         this.pageIndex = val
         this.getDataList()
       },
-      // 多选
+
       selectionChangeHandle (val) {
         this.dataListSelections = val
       },
-      // 新增 / 修改
+
       addOrUpdateHandle (id) {
         this.addOrUpdateVisible = true
         this.$nextTick(() => {
           this.$refs.addOrUpdate.init(id)
         })
       },
-      // 删除
+
       deleteHandle (id) {
         var ids = id ? [id] : this.dataListSelections.map(item => {
-          return item.brandId
+          return item.id
         })
         this.$confirm(`确定对[id=${ids.join(',')}]进行[${id ? '删除' : '批量删除'}]操作?`, '提示', {
           confirmButtonText: '确定',
@@ -169,7 +215,7 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/generator/pmsbrand/delete'),
+            url: this.$http.adornUrl('/ware/wareordertask/delete'),
             method: 'post',
             data: this.$http.adornData(ids, false)
           }).then(({data}) => {

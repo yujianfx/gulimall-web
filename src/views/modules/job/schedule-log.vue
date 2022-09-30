@@ -100,7 +100,7 @@
         this.visible = true
         this.getDataList()
       },
-      // 获取数据列表
+
       getDataList () {
         this.dataListLoading = true
         this.$http({
@@ -122,18 +122,18 @@
           this.dataListLoading = false
         })
       },
-      // 每页数
+
       sizeChangeHandle (val) {
         this.pageSize = val
         this.pageIndex = 1
         this.getDataList()
       },
-      // 当前页
+
       currentChangeHandle (val) {
         this.pageIndex = val
         this.getDataList()
       },
-      // 失败信息
+
       showErrorInfo (id) {
         this.$http({
           url: this.$http.adornUrl(`/sys/scheduleLog/info/${id}`),

@@ -35,7 +35,7 @@
         this.url = this.$http.adornUrl(`/sys/oss/upload?token=${this.$cookie.get('token')}`)
         this.visible = true
       },
-      // 上传之前
+
       beforeUploadHandle (file) {
         if (file.type !== 'image/jpg' && file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {
           this.$message.error('只支持jpg、png、gif格式的图片！')
@@ -43,7 +43,7 @@
         }
         this.num++
       },
-      // 上传成功
+
       successHandle (response, file, fileList) {
         this.fileList = fileList
         this.successNum++
@@ -61,7 +61,7 @@
           this.$message.error(response.msg)
         }
       },
-      // 弹窗关闭时
+
       closeHandle () {
         this.fileList = []
         this.$emit('refreshDataList')

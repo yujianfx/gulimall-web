@@ -66,14 +66,14 @@
       }
     },
     methods: {
-      // 初始化
+
       init () {
         this.visible = true
         this.$nextTick(() => {
           this.$refs['dataForm'].resetFields()
         })
       },
-      // 表单提交
+
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
